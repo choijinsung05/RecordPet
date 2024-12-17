@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 ---
-name: 🚀 기능 요청
+name: 🚀 기능 개발
 about: 새로운 기능이나 개선 사항을 제안합니다.
 title: "[Feature]: "
 labels: enhancement
@@ -16,7 +16,7 @@ assignees: ''
 
 ---
 
-## 🚀 요청하는 기능  
+## 🚀 추가사항 
 추가되었으면 하는 기능에 대해 설명해주세요.  
 
 **기능 설명**:  
