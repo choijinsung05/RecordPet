@@ -41,6 +41,12 @@ dependencies {
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// validator
+	implementation 'commons-validator:commons-validator:1.7'
+
+	// DB
+	runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
 tasks.named('test') {
