@@ -1,4 +1,4 @@
-package teamyc.recordpet.global;
+package teamyc.recordpet.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

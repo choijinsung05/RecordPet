@@ -1,9 +1,9 @@
-package teamyc.recordpet.user.dto;
+package teamyc.recordpet.domain.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import teamyc.recordpet.user.entity.Role;
-import teamyc.recordpet.user.entity.User;
+import teamyc.recordpet.domain.user.entity.User;
+import teamyc.recordpet.domain.user.entity.Role;
 
 @Getter
 public class UserSignupResponse {
