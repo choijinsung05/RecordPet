@@ -1,4 +1,4 @@
-package teamyc.recordpet.user.entity;
+package teamyc.recordpet.domain.user.entity;
 
 import lombok.RequiredArgsConstructor;
 

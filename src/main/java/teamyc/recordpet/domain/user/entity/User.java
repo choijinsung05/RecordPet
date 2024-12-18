@@ -1,4 +1,4 @@
-package teamyc.recordpet.user.entity;
+package teamyc.recordpet.domain.user.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

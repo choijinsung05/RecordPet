@@ -1,12 +1,12 @@
-package teamyc.recordpet.user.service;
+package teamyc.recordpet.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import teamyc.recordpet.user.dto.UserSignupRequest;
-import teamyc.recordpet.user.dto.UserSignupResponse;
-import teamyc.recordpet.user.entity.User;
-import teamyc.recordpet.user.repository.UserRepository;
+import teamyc.recordpet.domain.user.dto.UserSignupRequest;
+import teamyc.recordpet.domain.user.dto.UserSignupResponse;
+import teamyc.recordpet.domain.user.entity.User;
+import teamyc.recordpet.domain.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
