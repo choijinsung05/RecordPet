@@ -1,5 +1,7 @@
 package teamyc.recordpet.domain.user.service;
 
+import static teamyc.recordpet.global.exception.ResultCode.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -7,6 +9,7 @@ import teamyc.recordpet.domain.user.dto.UserSignupRequest;
 import teamyc.recordpet.domain.user.dto.UserSignupResponse;
 import teamyc.recordpet.domain.user.entity.User;
 import teamyc.recordpet.domain.user.repository.UserRepository;
+import teamyc.recordpet.global.exception.GlobalException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +32,7 @@ public class UserService {
 
     private void checkDuplicateEmail(UserSignupRequest req) {
         if (userRepository.existsByEmail(req.getEmail())) {
-            throw new IllegalArgumentException("중복 이메일");
+            throw new GlobalException(DUPLICATE_USER_EMAIL);
         }
     }
 }
