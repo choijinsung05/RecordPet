@@ -8,14 +8,17 @@ import org.springframework.web.bind.annotation.RestController;
 import teamyc.recordpet.domain.user.dto.UserSignupRequest;
 import teamyc.recordpet.domain.user.dto.UserSignupResponse;
 import teamyc.recordpet.domain.user.service.UserService;
+import teamyc.recordpet.global.exception.CustomResponse;
 
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
+
     @PostMapping("/signup")
-    public UserSignupResponse signup(@RequestBody UserSignupRequest req){
-        return userService.signup(req);
+    public CustomResponse<UserSignupResponse> signup(@RequestBody UserSignupRequest req) {
+        return CustomResponse.success(userService.signup(req));
     }
 }
