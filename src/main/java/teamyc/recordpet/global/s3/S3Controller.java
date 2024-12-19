@@ -20,7 +20,7 @@ public class S3Controller {
     @PostMapping("/upload")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
         try {
-            String fileUrl = s3Service.uploadImage(file, "uploads");
+            String fileUrl = s3Service.uploadFile(file, "uploads");
             return ResponseEntity.ok("정상적으로 파일이 업로드 되었습니다. "+ fileUrl);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("업로드에 실패했습니다." + e.getMessage());

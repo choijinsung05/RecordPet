@@ -23,7 +23,7 @@ public class S3Service {
         this.s3Client = s3Client;
     }
 
-    public String uploadImage(MultipartFile file, String folderName) throws IOException {
+    public String uploadFile(MultipartFile file, String folderName) throws IOException {
         String fileName = folderName + "/" + file.getOriginalFilename()+"_"+UUID.randomUUID();
 
         Path tempFile = Path.of(System.getProperty("java.io.tmpdir"), fileName);

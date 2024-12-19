@@ -23,19 +23,19 @@ public class PetController {
     public ResponseEntity<PetResponse> addPet(@RequestBody PetRegisterRequest req) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(petService.save(req));
+                .body(petService.PetProfileSave(req));
     }
 
     @GetMapping
     public ResponseEntity<List<PetResponse>> findAllPets() {
         return ResponseEntity
                 .ok()
-                .body(petService.findAll());
+                .body(petService.PetProfileFindAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PetResponse> findPetById(@PathVariable Long id) {
-        PetResponse res = petService.findById(id);
+        PetResponse res = petService.PetProfileFindById(id);
 
         return ResponseEntity.ok()
                 .body(res);
@@ -43,7 +43,7 @@ public class PetController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PetUpdateResponse> updatePet(@PathVariable Long id, @RequestBody PetUpdateRequest req) {
-        PetUpdateResponse res = petService.update(id, req);
+        PetUpdateResponse res = petService.PetProfileUpdate(id, req);
 
         return ResponseEntity.ok()
                 .body(res);
@@ -51,7 +51,7 @@ public class PetController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePet(@PathVariable Long id) {
-        petService.delete(id);
+        petService.PetProfileDelete(id);
 
         return ResponseEntity.ok()
                 .build();
