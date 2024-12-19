@@ -1,25 +1,22 @@
 package teamyc.recordpet.domain.pet.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import teamyc.recordpet.domain.pet.entity.Gender;
 import teamyc.recordpet.domain.pet.entity.Pet;
 
 @Getter
-public class PetResponse {
+public class PetUpdateResponse {
 
     private final Long id;
     private final String name;
     private final int age;
     private final Gender gender;
-
-    @JsonProperty("isVaccinated")
     private final boolean isVaccinated;
     private final String photoUrl;
 
     @Builder
-    private PetResponse(Long id, String name, int age, Gender gender, boolean isVaccinated, String photoUrl) {
+    private PetUpdateResponse(Long id, String name, int age, Gender gender, boolean isVaccinated, String photoUrl) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -28,8 +25,8 @@ public class PetResponse {
         this.photoUrl = photoUrl;
     }
 
-    public static PetResponse fromEntity(Pet pet) {
-        return PetResponse.builder()
+    public static PetUpdateResponse fromEntity(Pet pet) {
+        return PetUpdateResponse.builder()
                 .id(pet.getId())
                 .name(pet.getName())
                 .age(pet.getAge())
