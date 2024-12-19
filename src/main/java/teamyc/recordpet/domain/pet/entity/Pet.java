@@ -2,7 +2,6 @@ package teamyc.recordpet.domain.pet.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import teamyc.recordpet.domain.user.entity.User;
 
 @Entity
 @Table(name = "pet")
@@ -57,6 +56,7 @@ public class Pet {
     public void update(String name, int age,Boolean isVaccinated, String photoUrl) {
         this.name = name;
         this.age = age;
+        this.isVaccinated = isVaccinated;
         this.photoUrl = photoUrl;
     }
 }

@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamyc.recordpet.domain.pet.dto.PetResponse;
+import teamyc.recordpet.domain.pet.dto.PetUpdateResponse;
 import teamyc.recordpet.domain.pet.entity.Pet;
 import teamyc.recordpet.domain.pet.dto.PetUpdateRequest;
 import teamyc.recordpet.domain.pet.dto.PetRegisterRequest;
@@ -38,14 +39,14 @@ public class PetService {
     }
     //수정
     @Transactional
-    public PetResponse update(long id, PetUpdateRequest req){
+    public PetUpdateResponse update(long id, PetUpdateRequest req){
         Pet pet = petRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found " + id));
 
         pet.update(req.getName(), req.getAge(),req.isVaccinated(), req.getPhotoUrl());
 
 
-        return PetResponse.fromEntity(pet);
+        return PetUpdateResponse.fromEntity(pet);
     }
     //삭제
     public void delete(long id){

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import teamyc.recordpet.domain.pet.dto.PetRegisterRequest;
 import teamyc.recordpet.domain.pet.dto.PetResponse;
 import teamyc.recordpet.domain.pet.dto.PetUpdateRequest;
+import teamyc.recordpet.domain.pet.dto.PetUpdateResponse;
 import teamyc.recordpet.domain.pet.service.PetService;
 
 import java.util.List;
@@ -41,8 +42,8 @@ public class PetController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PetResponse> updatePet(@PathVariable Long id, @RequestBody PetUpdateRequest req) {
-        PetResponse res = petService.update(id, req);
+    public ResponseEntity<PetUpdateResponse> updatePet(@PathVariable Long id, @RequestBody PetUpdateRequest req) {
+        PetUpdateResponse res = petService.update(id, req);
 
         return ResponseEntity.ok()
                 .body(res);
