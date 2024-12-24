@@ -13,6 +13,7 @@ public enum ResultCode {
 
     // User U-
     DUPLICATE_USER_EMAIL("U001", "이미 가입된 이메일 입니다.", HttpStatus.CONFLICT),
+    DUPLICATE_USER_NICKNAME("U002", "중복된 닉네임 입니다.", HttpStatus.CONFLICT),
 
     // Pet P-
     NOT_FOUND_PET_PROFILE("P001","조회된 프로필이 없습니다.",HttpStatus.NOT_FOUND);
