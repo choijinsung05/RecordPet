@@ -171,7 +171,7 @@ class PetControllerTest {
                 .name("petName")
                 .age(3)
                 .gender(Gender.F)
-                .isVaccinated(false)
+                .isNeutered(false)
                 .photoUrl("sampleUrl")
                 .build());
     }
