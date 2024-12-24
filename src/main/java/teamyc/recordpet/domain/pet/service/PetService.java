@@ -3,12 +3,13 @@ package teamyc.recordpet.domain.pet.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import teamyc.recordpet.domain.pet.dto.PetRegisterRequest;
 import teamyc.recordpet.domain.pet.dto.PetResponse;
+import teamyc.recordpet.domain.pet.dto.PetUpdateRequest;
 import teamyc.recordpet.domain.pet.dto.PetUpdateResponse;
 import teamyc.recordpet.domain.pet.entity.Pet;
-import teamyc.recordpet.domain.pet.dto.PetUpdateRequest;
-import teamyc.recordpet.domain.pet.dto.PetRegisterRequest;
 import teamyc.recordpet.domain.pet.repository.PetRepository;
+import teamyc.recordpet.global.exception.GlobalException;
 
 import java.util.List;
 import java.util.stream.Collectors;

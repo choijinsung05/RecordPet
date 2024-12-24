@@ -1,14 +1,13 @@
 package teamyc.recordpet.domain.pet.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamyc.recordpet.domain.pet.dto.PetRegisterRequest;
 import teamyc.recordpet.domain.pet.dto.PetResponse;
 import teamyc.recordpet.domain.pet.dto.PetUpdateRequest;
 import teamyc.recordpet.domain.pet.dto.PetUpdateResponse;
 import teamyc.recordpet.domain.pet.service.PetService;
+import teamyc.recordpet.global.exception.CustomResponse;
 
 import java.util.List;
 
