@@ -19,7 +19,7 @@ public class PetRegisterRequest {
                 .name(name)
                 .age(age)
                 .gender(gender)
-                .isVaccinated(isNeutered)
+                .isNeutered(isNeutered)
                 .photoUrl(photoUrl)
                 .build();
     }
