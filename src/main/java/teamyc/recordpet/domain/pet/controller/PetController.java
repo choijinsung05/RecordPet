@@ -20,40 +20,37 @@ public class PetController {
     private final PetService petService;
 
     @PostMapping
-    public ResponseEntity<PetResponse> addPet(@RequestBody PetRegisterRequest req) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(petService.PetProfileSave(req));
+    public CustomResponse<PetResponse> addPet(@RequestBody PetRegisterRequest req) {
+        return CustomResponse
+                .created(petService.PetProfileSave(req));
     }
 
     @GetMapping
-    public ResponseEntity<List<PetResponse>> findAllPets() {
-        return ResponseEntity
-                .ok()
-                .body(petService.PetProfileFindAll());
+    public CustomResponse<List<PetResponse>> findAllPets() {
+        return CustomResponse
+                .success(petService.PetProfileFindAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PetResponse> findPetById(@PathVariable Long id) {
+    public CustomResponse<PetResponse> findPetById(@PathVariable Long id) {
         PetResponse res = petService.PetProfileFindById(id);
 
-        return ResponseEntity.ok()
-                .body(res);
+        return CustomResponse
+                .success(res);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PetUpdateResponse> updatePet(@PathVariable Long id, @RequestBody PetUpdateRequest req) {
+    public CustomResponse<PetUpdateResponse> updatePet(@PathVariable Long id, @RequestBody PetUpdateRequest req) {
         PetUpdateResponse res = petService.PetProfileUpdate(id, req);
 
-        return ResponseEntity.ok()
-                .body(res);
+        return CustomResponse
+                .success(res);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePet(@PathVariable Long id) {
+    public CustomResponse<Void> deletePet(@PathVariable Long id) {
         petService.PetProfileDelete(id);
 
-        return ResponseEntity.ok()
-                .build();
+        return CustomResponse.success(null);
     }
 }

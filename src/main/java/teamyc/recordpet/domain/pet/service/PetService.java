@@ -13,6 +13,8 @@ import teamyc.recordpet.domain.pet.repository.PetRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static teamyc.recordpet.global.exception.ResultCode.NOT_FOUND_PET_PROFILE;
+
 @RequiredArgsConstructor
 @Service
 public class PetService {
@@ -28,9 +30,10 @@ public class PetService {
 
     public PetResponse PetProfileFindById(Long id){
         Pet pet = petRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found " + id));
+                .orElseThrow(() -> new GlobalException(NOT_FOUND_PET_PROFILE));
         return PetResponse.fromEntity(pet);
     }
+
     //등록
     public PetResponse PetProfileSave(PetRegisterRequest req){
         Pet savedPet = petRepository.save(req.toEntity());
@@ -41,7 +44,7 @@ public class PetService {
     @Transactional
     public PetUpdateResponse PetProfileUpdate(long id, PetUpdateRequest req){
         Pet pet = petRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found " + id));
+                .orElseThrow(() -> new GlobalException(NOT_FOUND_PET_PROFILE));
 
         pet.update(req.getName(), req.getAge(), req.isNeutered(), req.getPhotoUrl());
 
