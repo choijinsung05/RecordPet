@@ -60,14 +60,18 @@ class PetControllerTest {
         final Boolean isNeutered = false;
         final String photoUrl = "testUrl";
 
-        PetRegisterRequest req = new PetRegisterRequest(name, age, gender, isVaccinated, photoUrl);
+        PetRegisterRequest req = new PetRegisterRequest(name, age, gender, isNeutered, photoUrl);
         final String requestBody = objectMapper.writeValueAsString(req);
+
+        System.out.println(requestBody);
         //when
         ResultActions result = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestBody));
         //then
-        result.andExpect(status().isCreated());
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value("CREATED"));
 
         List<Pet> pets = petRepository.findAll();
 
@@ -124,11 +128,11 @@ class PetControllerTest {
         //then
         result
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value(savedPet.getName()))
-                .andExpect(jsonPath("$[0].age").value(savedPet.getAge()))
-                .andExpect(jsonPath("$[0].gender").value(savedPet.getGender().toString()))
-                .andExpect(jsonPath("$[0].isVaccinated").value(savedPet.getIsVaccinated().toString()))
-                .andExpect(jsonPath("$[0].photoUrl").value(savedPet.getPhotoUrl()));
+                .andExpect(jsonPath("$.data.[0].name").value(savedPet.getName()))
+                .andExpect(jsonPath("$.data.[0].age").value(savedPet.getAge()))
+                .andExpect(jsonPath("$.data.[0].gender").value(savedPet.getGender().toString()))
+                .andExpect(jsonPath("$.data.[0].isNeutered").value(savedPet.getIsNeutered().toString()))
+                .andExpect(jsonPath("$.data.[0].photoUrl").value(savedPet.getPhotoUrl()));
     }
 
     @DisplayName("펫 프로필 단건 조회 성공")
@@ -143,11 +147,11 @@ class PetControllerTest {
 
         result
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(savedPet.getName()))
-                .andExpect(jsonPath("$.age").value(savedPet.getAge()))
-                .andExpect(jsonPath("$.gender").value(savedPet.getGender().toString()))
-                .andExpect(jsonPath("$.isVaccinated").value(savedPet.getIsVaccinated()))
-                .andExpect(jsonPath("$.photoUrl").value(savedPet.getPhotoUrl()));
+                .andExpect(jsonPath("$.data.name").value(savedPet.getName()))
+                .andExpect(jsonPath("$.data.age").value(savedPet.getAge()))
+                .andExpect(jsonPath("$.data.gender").value(savedPet.getGender().toString()))
+                .andExpect(jsonPath("$.data.isNeutered").value(savedPet.getIsNeutered()))
+                .andExpect(jsonPath("$.data.photoUrl").value(savedPet.getPhotoUrl()));
     }
 
     @DisplayName("펫 프로필 삭제 성공")
