@@ -1,0 +1,182 @@
+package teamyc.recordpet.domain.pet.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import teamyc.recordpet.RecordPetApplication;
+import teamyc.recordpet.domain.pet.dto.PetRegisterRequest;
+import teamyc.recordpet.domain.pet.dto.PetUpdateRequest;
+import teamyc.recordpet.domain.pet.entity.Gender;
+import teamyc.recordpet.domain.pet.entity.Pet;
+import teamyc.recordpet.domain.pet.repository.PetRepository;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest(classes = RecordPetApplication.class)
+@AutoConfigureMockMvc(addFilters = false)
+class PetControllerTest {
+
+    @Autowired
+    private WebApplicationContext context;
+
+    @Autowired
+    private PetRepository petRepository;
+
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @BeforeEach
+    public void MockMvcSetUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .build();
+        petRepository.deleteAll();
+    }
+
+
+    @DisplayName("펫 프로필 등록 성공")
+    @Test
+    public void addPetSuccess() throws Exception {
+        //given
+        final String url = "/api/v1/pets";
+        final String name = "test";
+        final int age = 3;
+        final Gender gender = Gender.F;
+        final Boolean isNeutered = false;
+        final String photoUrl = "testUrl";
+
+        PetRegisterRequest req = new PetRegisterRequest(name, age, gender, isNeutered, photoUrl);
+        final String requestBody = objectMapper.writeValueAsString(req);
+
+        System.out.println(requestBody);
+        //when
+        ResultActions result = mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+        //then
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value("CREATED"));
+
+        List<Pet> pets = petRepository.findAll();
+
+        assertThat(pets.size()).isEqualTo(1);
+        assertThat(pets.get(0).getName()).isEqualTo(name);
+        assertThat(pets.get(0).getAge()).isEqualTo(age);
+        assertThat(pets.get(0).getGender()).isEqualTo(gender);
+        assertThat(pets.get(0).getIsNeutered()).isEqualTo(isNeutered);
+        assertThat(pets.get(0).getPhotoUrl()).isEqualTo(photoUrl);
+    }
+
+    @DisplayName("펫 프로필 수정 성공")
+    @Test
+    public void updatePetSuccess() throws Exception {
+        //given
+        final String url = "/api/v1/pets/{id}";
+        Pet savedPet = createDefaultPet();
+
+        final String newName = "test";
+        final int newAge = 5;
+        final Boolean newIsNeutered = true;
+        final String newPhotoUrl = "updateUrl";
+
+        PetUpdateRequest request = PetUpdateRequest.builder()
+                .name(newName)
+                .age(newAge)
+                .isNeutered(newIsNeutered)
+                .photoUrl(newPhotoUrl)
+                .build();
+        //when
+        ResultActions result = mockMvc.perform(put(url, savedPet.getId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(request)));
+
+        //then
+        result.andExpect(status().isOk());
+
+        Pet pet = petRepository.findById(savedPet.getId()).orElseThrow();
+
+        assertThat(pet.getName()).isEqualTo(newName);
+        assertThat(pet.getAge()).isEqualTo(newAge);
+        assertThat(pet.getIsNeutered()).isEqualTo(newIsNeutered);
+        assertThat(pet.getPhotoUrl()).isEqualTo(newPhotoUrl);
+    }
+
+    @DisplayName("펫 프로필 목록 조회 성공")
+    @Test
+    public void findAllPetsSuccess() throws Exception {
+        //given
+        final String url = "/api/v1/pets";
+        Pet savedPet = createDefaultPet();
+        //when
+        final ResultActions result = mockMvc.perform(get(url).accept(MediaType.APPLICATION_JSON_VALUE));
+        //then
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.[0].name").value(savedPet.getName()))
+                .andExpect(jsonPath("$.data.[0].age").value(savedPet.getAge()))
+                .andExpect(jsonPath("$.data.[0].gender").value(savedPet.getGender().toString()))
+                .andExpect(jsonPath("$.data.[0].isNeutered").value(savedPet.getIsNeutered().toString()))
+                .andExpect(jsonPath("$.data.[0].photoUrl").value(savedPet.getPhotoUrl()));
+    }
+
+    @DisplayName("펫 프로필 단건 조회 성공")
+    @Test
+    public void findPetSuccess() throws Exception {
+        //given
+        final String url = "/api/v1/pets/{id}";
+        Pet savedPet = createDefaultPet();
+        //when
+        final ResultActions result = mockMvc.perform(get(url, savedPet.getId()));
+        //then
+
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.name").value(savedPet.getName()))
+                .andExpect(jsonPath("$.data.age").value(savedPet.getAge()))
+                .andExpect(jsonPath("$.data.gender").value(savedPet.getGender().toString()))
+                .andExpect(jsonPath("$.data.isNeutered").value(savedPet.getIsNeutered()))
+                .andExpect(jsonPath("$.data.photoUrl").value(savedPet.getPhotoUrl()));
+    }
+
+    @DisplayName("펫 프로필 삭제 성공")
+    @Test
+    public void deletePetSuccess() throws Exception {
+        //given
+        final String url = "/api/v1/pets/{id}";
+        Pet savedPet = createDefaultPet();
+
+        //when
+        mockMvc.perform(delete(url, savedPet.getId()))
+                .andExpect(status().isOk());
+        //then
+
+        List<Pet> pets = petRepository.findAll();
+        assertThat(pets).isEmpty();
+    }
+
+    private Pet createDefaultPet() {
+        return petRepository.save(Pet.builder()
+                .name("petName")
+                .age(3)
+                .gender(Gender.F)
+                .isNeutered(false)
+                .photoUrl("sampleUrl")
+                .build());
+    }
+}

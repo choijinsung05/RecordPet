@@ -23,6 +23,15 @@ public class CustomResponse<T> implements Serializable {
             .build();
     }
 
+    public static <T> CustomResponse<T> created(T data) {
+        return CustomResponse.<T>builder()
+            .httpStatus(ResultCode.CREATED.getHttpStatus())
+            .code(ResultCode.CREATED.getCode())
+            .message(ResultCode.CREATED.getMessage())
+            .data(data)
+            .build();
+    }
+
     public static <T> CustomResponse<T> error(ResultCode resultCode) {
         return CustomResponse.<T>builder()
             .httpStatus(resultCode.getHttpStatus())
