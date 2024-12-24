@@ -12,16 +12,16 @@ public class PetUpdateResponse {
     private final String name;
     private final int age;
     private final Gender gender;
-    private final boolean isVaccinated;
+    private final boolean isNeutered;
     private final String photoUrl;
 
     @Builder
-    private PetUpdateResponse(Long id, String name, int age, Gender gender, boolean isVaccinated, String photoUrl) {
+    private PetUpdateResponse(Long id, String name, int age, Gender gender, boolean isNeutered, String photoUrl) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.gender = gender;
-        this.isVaccinated = isVaccinated;
+        this.isNeutered = isNeutered;
         this.photoUrl = photoUrl;
     }
 
@@ -31,7 +31,7 @@ public class PetUpdateResponse {
                 .name(pet.getName())
                 .age(pet.getAge())
                 .gender(pet.getGender())
-                .isVaccinated(pet.getIsVaccinated())
+                .isNeutered(pet.getIsNeutered())
                 .photoUrl(pet.getPhotoUrl())
                 .build();
     }

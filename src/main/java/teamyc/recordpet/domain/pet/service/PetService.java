@@ -43,7 +43,7 @@ public class PetService {
         Pet pet = petRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found " + id));
 
-        pet.update(req.getName(), req.getAge(),req.isVaccinated(), req.getPhotoUrl());
+        pet.update(req.getName(), req.getAge(), req.isNeutered(), req.getPhotoUrl());
 
 
         return PetUpdateResponse.fromEntity(pet);

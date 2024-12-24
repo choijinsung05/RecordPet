@@ -11,7 +11,7 @@ public class PetRegisterRequest {
     private String name;
     private int age;
     private Gender gender;
-    private boolean isVaccinated;
+    private boolean isNeutered;
     private String photoUrl;
 
     public Pet toEntity(){
@@ -19,7 +19,7 @@ public class PetRegisterRequest {
                 .name(name)
                 .age(age)
                 .gender(gender)
-                .isVaccinated(isVaccinated)
+                .isVaccinated(isNeutered)
                 .photoUrl(photoUrl)
                 .build();
     }

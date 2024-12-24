@@ -30,8 +30,8 @@ public class Pet {
     @Column(name = "gender", columnDefinition = "ENUM('M','F')", nullable = false)
     private Gender gender;
 
-    @Column(name = "is_vaccinated", nullable = false)
-    private Boolean isVaccinated;
+    @Column(name = "is_neutered", nullable = false)
+    private Boolean isNeutered;
 
     @Column(name = "photo_url", columnDefinition = "TEXT")
     private String photoUrl;
@@ -45,18 +45,18 @@ public class Pet {
     }
 
     @Builder
-    public Pet(String name, int age, Gender gender, Boolean isVaccinated, String photoUrl) {
+    public Pet(String name, int age, Gender gender, Boolean isNeutered, String photoUrl) {
         this.name = name;
         this.age = age;
         this.gender = gender;
-        this.isVaccinated = isVaccinated;
+        this.isNeutered = isNeutered;
         this.photoUrl = photoUrl;
     }
 
-    public void update(String name, int age,Boolean isVaccinated, String photoUrl) {
+    public void update(String name, int age,Boolean isNeutered, String photoUrl) {
         this.name = name;
         this.age = age;
-        this.isVaccinated = isVaccinated;
+        this.isNeutered = isNeutered;
         this.photoUrl = photoUrl;
     }
 }

@@ -8,15 +8,15 @@ import lombok.*;
 public class PetUpdateRequest {
     private String name;
     private int age;
-    @JsonProperty("isVaccinated")
-    private boolean isVaccinated;
+    @JsonProperty("isNeutered")
+    private boolean isNeutered;
     private String photoUrl;
 
     @Builder
-    public PetUpdateRequest(String name, int age, boolean isVaccinated, String photoUrl) {
+    public PetUpdateRequest(String name, int age, boolean isNeutered, String photoUrl) {
         this.name = name;
         this.age = age;
-        this.isVaccinated = isVaccinated;
+        this.isNeutered = isNeutered;
         this.photoUrl = photoUrl;
     }
 

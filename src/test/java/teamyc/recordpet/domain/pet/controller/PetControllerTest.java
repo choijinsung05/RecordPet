@@ -57,7 +57,7 @@ class PetControllerTest {
         final String name = "test";
         final int age = 3;
         final Gender gender = Gender.F;
-        final Boolean isVaccinated = false;
+        final Boolean isNeutered = false;
         final String photoUrl = "testUrl";
 
         PetRegisterRequest req = new PetRegisterRequest(name, age, gender, isVaccinated, photoUrl);
@@ -75,7 +75,7 @@ class PetControllerTest {
         assertThat(pets.get(0).getName()).isEqualTo(name);
         assertThat(pets.get(0).getAge()).isEqualTo(age);
         assertThat(pets.get(0).getGender()).isEqualTo(gender);
-        assertThat(pets.get(0).getIsVaccinated()).isEqualTo(isVaccinated);
+        assertThat(pets.get(0).getIsNeutered()).isEqualTo(isNeutered);
         assertThat(pets.get(0).getPhotoUrl()).isEqualTo(photoUrl);
     }
 
@@ -88,13 +88,13 @@ class PetControllerTest {
 
         final String newName = "test";
         final int newAge = 5;
-        final Boolean newIsVaccinated = true;
+        final Boolean newIsNeutered = true;
         final String newPhotoUrl = "updateUrl";
 
         PetUpdateRequest request = PetUpdateRequest.builder()
                 .name(newName)
                 .age(newAge)
-                .isVaccinated(newIsVaccinated)
+                .isNeutered(newIsNeutered)
                 .photoUrl(newPhotoUrl)
                 .build();
         //when
@@ -109,7 +109,7 @@ class PetControllerTest {
 
         assertThat(pet.getName()).isEqualTo(newName);
         assertThat(pet.getAge()).isEqualTo(newAge);
-        assertThat(pet.getIsVaccinated()).isEqualTo(newIsVaccinated);
+        assertThat(pet.getIsNeutered()).isEqualTo(newIsNeutered);
         assertThat(pet.getPhotoUrl()).isEqualTo(newPhotoUrl);
     }
 

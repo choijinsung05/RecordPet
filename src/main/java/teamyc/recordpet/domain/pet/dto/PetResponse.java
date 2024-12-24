@@ -14,17 +14,17 @@ public class PetResponse {
     private final int age;
     private final Gender gender;
 
-    @JsonProperty("isVaccinated")
-    private final boolean isVaccinated;
+    @JsonProperty("isNeutered")
+    private final boolean isNeutered;
     private final String photoUrl;
 
     @Builder
-    private PetResponse(Long id, String name, int age, Gender gender, boolean isVaccinated, String photoUrl) {
+    private PetResponse(Long id, String name, int age, Gender gender, boolean isNeutered, String photoUrl) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.gender = gender;
-        this.isVaccinated = isVaccinated;
+        this.isNeutered = isNeutered;
         this.photoUrl = photoUrl;
     }
 
@@ -34,7 +34,7 @@ public class PetResponse {
                 .name(pet.getName())
                 .age(pet.getAge())
                 .gender(pet.getGender())
-                .isVaccinated(pet.getIsVaccinated())
+                .isNeutered(pet.getIsNeutered())
                 .photoUrl(pet.getPhotoUrl())
                 .build();
     }
