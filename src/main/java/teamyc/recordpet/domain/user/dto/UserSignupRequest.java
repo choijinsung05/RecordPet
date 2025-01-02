@@ -11,11 +11,11 @@ import teamyc.recordpet.domain.user.entity.User;
 @AllArgsConstructor
 public class UserSignupRequest {
 
-    @Pattern(regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")
+    @Pattern(regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$", message = "이메일 형식에 맞지 않습니다.")
     private final String email;
-    @NotBlank
+    @NotBlank(message = "닉네임을 입력해주세요.")
     private final String nickname;
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?\":{}|<>])(?=.*[a-zA-Z]).{1,16}$\n")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?\":{}|<>])(?=.*[a-zA-Z]).{1,16}$\n", message = "비밀번호는 특수문자, 대소문자 포함 16자 이내여야 합니다.")
     private final String password;
 
     public User toEntity(String encodedPassword) {
