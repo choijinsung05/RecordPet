@@ -1,6 +1,7 @@
 package teamyc.recordpet.global.mail;
 
 import static teamyc.recordpet.global.exception.ResultCode.EMAIL_SEND_FAILED;
+import static teamyc.recordpet.global.exception.ResultCode.INVALID_CODE;
 
 import jakarta.mail.Message.RecipientType;
 import jakarta.mail.MessagingException;
@@ -44,6 +45,24 @@ public class MailUtil {
         } catch (MessagingException e) {
             throw new GlobalException(EMAIL_SEND_FAILED);
         }
+    }
+
+    public void checkCode(String email, String code) {
+        EmailAuth emailAuth = getEmailAuth(email);
+
+        if (!code.equals(emailAuth.getCode())) {
+            throw new GlobalException(INVALID_CODE);
+        }
+
+        emailAuthService.delete(email);
+        EmailAuth newEmailAuth = EmailAuth.builder().email(email).code(code).isChecked(true)
+            .build();
+
+        emailAuthService.save(newEmailAuth);
+    }
+
+    public EmailAuth getEmailAuth(String email) {
+        return emailAuthService.findById(email);
     }
 
     private MimeMessage createMessage(String to, String code)
