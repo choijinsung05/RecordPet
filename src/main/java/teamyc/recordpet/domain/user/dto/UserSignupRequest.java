@@ -15,7 +15,7 @@ public class UserSignupRequest {
     private final String email;
     @NotBlank(message = "닉네임을 입력해주세요.")
     private final String nickname;
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?\":{}|<>])(?=.*[a-zA-Z]).{1,16}$\n", message = "비밀번호는 특수문자, 대소문자 포함 16자 이내여야 합니다.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{10,16}$", message = "비밀번호는 특수문자, 대소문자 포함 10자-16자 이내여야 합니다.")
     private final String password;
 
     public User toEntity(String encodedPassword) {
