@@ -1,8 +1,8 @@
 package teamyc.recordpet.global.mail.entity;
 
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @Getter
@@ -10,8 +10,8 @@ import org.springframework.data.redis.core.RedisHash;
 public class EmailAuth {
 
     @Id
-    private String email;
-    private String code;
+    private final String email;
+    private final String code;
     private boolean isChecked = false;
 
     @Builder
