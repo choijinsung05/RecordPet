@@ -1,4 +1,4 @@
-package teamyc.recordpet.global.config;
+package teamyc.recordpet.global.s3;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,14 +23,14 @@ public class S3Config {
     @Bean
     public S3Client s3Client() {
         return S3Client.builder()
-                .region(Region.of(region))
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(
-                                        accessKey,secretKey
-                                )
-                        )
+            .region(Region.of(region))
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(
+                        accessKey, secretKey
+                    )
                 )
-                .build();
+            )
+            .build();
     }
 }
