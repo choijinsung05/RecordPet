@@ -18,12 +18,12 @@ public class RedisConfig {
         this.port = port;
     }
 
-    @Bean
+    @Bean(name = "customRedisConnectionFactory")
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(host, port);
     }
 
-    @Bean
+    @Bean(name = "customRedisTemplate")
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
