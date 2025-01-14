@@ -10,7 +10,6 @@ import teamyc.recordpet.domain.weightLog.dto.WeightLogResponse;
 import teamyc.recordpet.domain.weightLog.service.WeightLogService;
 import teamyc.recordpet.global.exception.CustomResponse;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 

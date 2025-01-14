@@ -16,6 +16,7 @@ public enum ResultCode {
 
     // Pet P-
     NOT_FOUND_PET_PROFILE("P001","조회된 프로필이 없습니다.",HttpStatus.NOT_FOUND),
+    NOT_EXIST_PET("P002", "존재하는 펫 정보가 없습니다.", HttpStatus.NOT_FOUND),
 
     // Weight W-
     NOT_FOUND_WEIGHT_LOG("W001", "조회된 몸무게 정보가 없습니다.",HttpStatus.NOT_FOUND);
