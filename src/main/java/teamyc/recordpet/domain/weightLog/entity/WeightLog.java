@@ -20,7 +20,7 @@ public class WeightLog {
 
     private Double weight;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date date = new Date();
 
 }
