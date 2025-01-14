@@ -15,7 +15,10 @@ public enum ResultCode {
     DUPLICATE_USER_EMAIL("U001", "이미 가입된 이메일 입니다.", HttpStatus.CONFLICT),
 
     // Pet P-
-    NOT_FOUND_PET_PROFILE("P001","조회된 프로필이 없습니다.",HttpStatus.NOT_FOUND);
+    NOT_FOUND_PET_PROFILE("P001","조회된 프로필이 없습니다.",HttpStatus.NOT_FOUND),
+
+    // Weight W-
+    NOT_FOUND_WEIGHT_LOG("W001", "조회된 몸무게 정보가 없습니다.",HttpStatus.NOT_FOUND);
 
     private final String code;
     private final String message;
