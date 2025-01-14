@@ -15,7 +15,10 @@ public enum ResultCode {
     DUPLICATE_USER_EMAIL("U001", "이미 가입된 이메일 입니다.", HttpStatus.CONFLICT),
 
     // Pet P-
-    NOT_FOUND_PET_PROFILE("P001","조회된 프로필이 없습니다.",HttpStatus.NOT_FOUND);
+    NOT_FOUND_PET_PROFILE("P001","조회된 프로필이 없습니다.",HttpStatus.NOT_FOUND),
+
+    // S3 S-
+    IMAGE_UPLOAD_FAIL("S001", "이미지 업로드 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String code;
     private final String message;
