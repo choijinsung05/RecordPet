@@ -10,6 +10,7 @@ import teamyc.recordpet.domain.weightLog.dto.WeightLogResponse;
 import teamyc.recordpet.domain.weightLog.service.WeightLogService;
 import teamyc.recordpet.global.exception.CustomResponse;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +23,8 @@ public class WeightLogController {
     @GetMapping
     public CustomResponse<List<WeightLogResponse>> findWeightLogByPetId(
             @RequestParam Long petId,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date endDate
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
     ) {
         List<WeightLogResponse> res = weightLogService.WeightLogsFindByDateRange(petId, startDate, endDate);
         return CustomResponse.success(res);
