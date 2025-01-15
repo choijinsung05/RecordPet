@@ -42,14 +42,14 @@ public class WeightLogService {
     }
 
     //등록
-    public Long registerWeightLog(WeightLogRegisterRequest request){
-        Pet pet = petRepository.findById(request.getPetId())
+    public Long registerWeightLog(WeightLogRegisterRequest request) {
+        Pet pet = petRepository.findById(request.petId())
                 .orElseThrow(() -> new GlobalException(NOT_EXIST_PET));
 
         WeightLog weightLog = WeightLog.builder()
                 .pet(pet)
-                .weight(request.getWeight())
-                .date(request.getDate())
+                .weight(request.weight())
+                .date(request.date())
                 .build();
 
         WeightLog savedWeightLog = weightLogRepository.save(weightLog);
