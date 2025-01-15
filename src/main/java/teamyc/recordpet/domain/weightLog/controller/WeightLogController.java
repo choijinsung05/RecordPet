@@ -4,10 +4,7 @@ package teamyc.recordpet.domain.weightLog.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import teamyc.recordpet.domain.weightLog.dto.WeightLogRegisterRequest;
 import teamyc.recordpet.domain.weightLog.dto.WeightLogResponse;
 import teamyc.recordpet.domain.weightLog.service.WeightLogService;
@@ -16,7 +13,8 @@ import teamyc.recordpet.global.exception.CustomResponse;
 import java.time.LocalDate;
 import java.util.List;
 
-@RestController("/api/v1/weight")
+@RestController
+@RequestMapping("/api/v1/weight")
 @RequiredArgsConstructor
 public class WeightLogController {
 
@@ -33,7 +31,7 @@ public class WeightLogController {
     }
 
     @PostMapping
-    public CustomResponse<Long> registerWeightLog(@Valid WeightLogRegisterRequest request){
+    public CustomResponse<Long> registerWeightLog(@Valid @RequestBody WeightLogRegisterRequest request){
         Long res = weightLogService.registerWeightLog(request);
         return CustomResponse.success(res);
     }

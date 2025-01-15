@@ -10,7 +10,10 @@ import java.util.Optional;
 @RepositoryDefinition(domainClass = WeightLog.class, idClass = Long.class)
 public interface WeightLogRepository {
 
-    Optional<List<WeightLog>> findByPetIdAndDateBetween(Long petId, Date startDate, Date endDate);
+    Optional<List<WeightLog>> findByPetIdAndDateBetween(Long petId, LocalDate startDate, LocalDate endDate);
 
     WeightLog save(WeightLog weightLog);
+
+    void deleteAll();
+
 }
