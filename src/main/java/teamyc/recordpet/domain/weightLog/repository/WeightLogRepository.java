@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface WeightLogRepository {
 
     Optional<List<WeightLog>> findByPetIdAndDateBetween(Long petId, Date startDate, Date endDate);
+
+    WeightLog save(WeightLog weightLog);
 }

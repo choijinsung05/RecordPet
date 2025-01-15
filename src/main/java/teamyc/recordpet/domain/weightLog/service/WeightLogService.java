@@ -2,8 +2,11 @@ package teamyc.recordpet.domain.weightLog.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import teamyc.recordpet.domain.pet.entity.Pet;
 import teamyc.recordpet.domain.pet.repository.PetRepository;
+import teamyc.recordpet.domain.weightLog.dto.WeightLogRegisterRequest;
 import teamyc.recordpet.domain.weightLog.dto.WeightLogResponse;
+import teamyc.recordpet.domain.weightLog.entity.WeightLog;
 import teamyc.recordpet.domain.weightLog.repository.WeightLogRepository;
 import teamyc.recordpet.global.exception.GlobalException;
 
@@ -38,6 +41,23 @@ public class WeightLogService {
                 .map(WeightLogResponse::fromEntity)
                 .toList();
     }
+
+    //등록
+    public Long registerWeightLog(WeightLogRegisterRequest request){
+        Pet pet = petRepository.findById(request.getPetId())
+                .orElseThrow(() -> new GlobalException(NOT_EXIST_PET));
+
+        WeightLog weightLog = WeightLog.builder()
+                .pet(pet)
+                .weight(request.getWeight())
+                .date(request.getDate())
+                .build();
+
+        WeightLog savedWeightLog = weightLogRepository.save(weightLog);
+
+        return savedWeightLog.getId();
+    }
+
 
     private Date getMonthsAgoDate(int months) {
         Calendar calendar = Calendar.getInstance();
