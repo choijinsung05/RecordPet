@@ -23,14 +23,13 @@ public class WeightLog {
 
     private Double weight;
 
-    @Temporal(TemporalType.DATE)
-    private Date date = new Date();
+    private LocalDate date;
 
     @Builder
-    WeightLog(Pet pet, Double weight, Date date){
+    WeightLog(Pet pet, Double weight, LocalDate  date){
         this.pet = pet;
         this.weight = weight;
-        this.date = date;
+        this.date = date != null ? date : LocalDate.now();
     }
 
 }

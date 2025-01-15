@@ -25,7 +25,7 @@ public class WeightLogService {
     private final PetRepository petRepository;
 
     //조회
-    public List<WeightLogResponse> WeightLogsFindByDateRange(Long petId, Date startDate, Date endDate) {
+    public List<WeightLogResponse> WeightLogsFindByDateRange(Long petId, LocalDate startDate, LocalDate endDate) {
         if (!petRepository.existsById(petId)) {
             throw new GlobalException(NOT_EXIST_PET);
         }
@@ -33,7 +33,7 @@ public class WeightLogService {
             startDate = getMonthsAgoDate(6);
         }
         if(endDate == null){
-            endDate = new Date();
+            endDate = LocalDate.now();
         }
         return weightLogRepository.findByPetIdAndDateBetween(petId, startDate, endDate)
                 .orElseThrow(() -> new GlobalException(NOT_FOUND_WEIGHT_LOG))
@@ -59,9 +59,7 @@ public class WeightLogService {
     }
 
 
-    private Date getMonthsAgoDate(int months) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -months);
-        return calendar.getTime();
+    private LocalDate getMonthsAgoDate(int months) {
+        return LocalDate.now().minusMonths(months);
     }
 }
