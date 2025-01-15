@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamyc.recordpet.domain.pet.entity.Pet;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
