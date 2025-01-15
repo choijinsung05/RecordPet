@@ -3,7 +3,7 @@ package teamyc.recordpet.domain.weightLog.repository;
 import org.springframework.data.repository.RepositoryDefinition;
 import teamyc.recordpet.domain.weightLog.entity.WeightLog;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 

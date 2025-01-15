@@ -10,8 +10,7 @@ import teamyc.recordpet.domain.weightLog.entity.WeightLog;
 import teamyc.recordpet.domain.weightLog.repository.WeightLogRepository;
 import teamyc.recordpet.global.exception.GlobalException;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static teamyc.recordpet.global.exception.ResultCode.NOT_EXIST_PET;
