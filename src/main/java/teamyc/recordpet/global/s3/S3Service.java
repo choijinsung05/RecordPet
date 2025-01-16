@@ -1,11 +1,12 @@
 package teamyc.recordpet.global.s3;
 
+import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import teamyc.recordpet.global.exception.GlobalException;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 import static teamyc.recordpet.global.exception.ResultCode.IMAGE_UPLOAD_FAIL;
 
+@Slf4j
 @Service
 public class S3Service {
 
@@ -36,19 +38,21 @@ public class S3Service {
     }
 
     public String uploadImage(MultipartFile file, String folderName) {
+        log.info("Received file in uploadImage: " + file.getOriginalFilename());
+        log.info("File Size: " + file.getSize());
+        log.info("File Content Type: " + file.getContentType());
         try {
-
-            Path originalTempFile = Path.of(System.getProperty("java.io.tmpdir"), file.getOriginalFilename());
+            String originalFilename = file.getOriginalFilename() != null ? file.getOriginalFilename() : "default.jpg";
+            Path originalTempFile = Path.of(System.getProperty("java.io.tmpdir"), originalFilename);
             file.transferTo(originalTempFile);
 
-            Path resizedTempFile = Files.createTempFile("optimized", file.getOriginalFilename());
-
+            Path resizedTempFile = Files.createTempFile("optimized", originalFilename);
             Thumbnails.of(originalTempFile.toFile())
                     .size(targetWidth, targetHeight)
                     .outputQuality(quality)
                     .toFile(resizedTempFile.toFile());
 
-            String fileName = folderName + "/" + file.getOriginalFilename() + "_" + UUID.randomUUID();
+            String fileName = folderName + "/" + originalFilename + "_" + UUID.randomUUID();
 
             s3Client.putObject(
                     PutObjectRequest.builder()
