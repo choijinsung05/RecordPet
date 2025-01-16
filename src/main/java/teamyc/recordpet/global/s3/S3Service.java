@@ -71,6 +71,16 @@ public class S3Service {
         }
     }
 
+    public void deleteFile(String fileUrl) {
+        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+        s3Client.deleteObject(
+                DeleteObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(fileName)
+                        .build()
+        );
+    }
+
     private String getPublicUrl(String fileName) {
         return String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName);
     }
