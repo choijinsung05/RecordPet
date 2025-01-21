@@ -52,9 +52,7 @@ public class WeightLogService {
                 .date(request.date())
                 .build();
 
-        WeightLog savedWeightLog = weightLogRepository.save(weightLog);
-
-        return savedWeightLog.getId();
+        return weightLogRepository.save(weightLog).getId();
     }
 
 
