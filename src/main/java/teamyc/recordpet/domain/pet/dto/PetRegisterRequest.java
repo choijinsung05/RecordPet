@@ -12,15 +12,14 @@ public class PetRegisterRequest {
     private int age;
     private Gender gender;
     private boolean isNeutered;
-    private String photoUrl;
 
-    public Pet toEntity(){
+    public Pet toEntity(String url){
         return Pet.builder()
                 .name(name)
                 .age(age)
                 .gender(gender)
                 .isNeutered(isNeutered)
-                .photoUrl(photoUrl)
+                .photoUrl(url)
                 .build();
     }
 }

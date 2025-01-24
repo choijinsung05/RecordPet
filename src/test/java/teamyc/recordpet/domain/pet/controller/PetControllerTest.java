@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -18,7 +19,10 @@ import teamyc.recordpet.domain.pet.dto.PetUpdateRequest;
 import teamyc.recordpet.domain.pet.entity.Gender;
 import teamyc.recordpet.domain.pet.entity.Pet;
 import teamyc.recordpet.domain.pet.repository.PetRepository;
+import teamyc.recordpet.global.s3.S3Service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +40,11 @@ class PetControllerTest {
     @Autowired
     private PetRepository petRepository;
 
+    @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private S3Service s3Service;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -52,27 +60,46 @@ class PetControllerTest {
     @DisplayName("펫 프로필 등록 성공")
     @Test
     public void addPetSuccess() throws Exception {
-        //given
+        // given
         final String url = "/api/v1/pets";
         final String name = "test";
         final int age = 3;
         final Gender gender = Gender.F;
         final Boolean isNeutered = false;
-        final String photoUrl = "testUrl";
 
-        PetRegisterRequest req = new PetRegisterRequest(name, age, gender, isNeutered, photoUrl);
-        final String requestBody = objectMapper.writeValueAsString(req);
+        // JSON 데이터 생성
+        String requestBody = objectMapper.writeValueAsString(
+                new PetRegisterRequest(name, age, gender, isNeutered)
+        );
 
-        System.out.println(requestBody);
-        //when
-        ResultActions result = mockMvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(requestBody));
-        //then
+        // MockMultipartFile 생성
+        MockMultipartFile profileImage = new MockMultipartFile(
+                "profileImage",              // @RequestPart 이름
+                "test.jpg",                  // 파일 이름
+                MediaType.IMAGE_JPEG_VALUE,  // MIME 타입
+                "image-content".getBytes()   // 파일 내용
+        );
+
+        MockMultipartFile jsonRequest = new MockMultipartFile(
+                "req",                       // @RequestBody 이름
+                "",
+                MediaType.APPLICATION_JSON_VALUE,
+                requestBody.getBytes()       // JSON 직렬화된 데이터
+        );
+
+        // when
+        ResultActions result = mockMvc.perform(multipart(url)
+                .file(profileImage)              // 파일 데이터
+                .file(jsonRequest)               // JSON 데이터
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE) // Content-Type 설정
+                .characterEncoding("UTF-8"));
+
+        // then
         result
-                .andExpect(status().isOk())
+                .andExpect(status().isOk()) // 201 상태 코드 확인
                 .andExpect(jsonPath("$.httpStatus").value("CREATED"));
 
+        // 데이터베이스 확인
         List<Pet> pets = petRepository.findAll();
 
         assertThat(pets.size()).isEqualTo(1);
@@ -80,41 +107,66 @@ class PetControllerTest {
         assertThat(pets.get(0).getAge()).isEqualTo(age);
         assertThat(pets.get(0).getGender()).isEqualTo(gender);
         assertThat(pets.get(0).getIsNeutered()).isEqualTo(isNeutered);
-        assertThat(pets.get(0).getPhotoUrl()).isEqualTo(photoUrl);
+        assertThat(pets.get(0).getPhotoUrl()).isNotNull(); // 업로드된 URL 확인
     }
 
     @DisplayName("펫 프로필 수정 성공")
     @Test
     public void updatePetSuccess() throws Exception {
-        //given
+        // given
         final String url = "/api/v1/pets/{id}";
-        Pet savedPet = createDefaultPet();
 
-        final String newName = "test";
+        Pet savedPet = createDefaultPet();
+        assertThat(savedPet).isNotNull();
+        assertThat(savedPet.getId()).isNotNull();
+
+        final String newName = "UpdatedName";
         final int newAge = 5;
         final Boolean newIsNeutered = true;
-        final String newPhotoUrl = "updateUrl";
 
-        PetUpdateRequest request = PetUpdateRequest.builder()
-                .name(newName)
-                .age(newAge)
-                .isNeutered(newIsNeutered)
-                .photoUrl(newPhotoUrl)
-                .build();
-        //when
-        ResultActions result = mockMvc.perform(put(url, savedPet.getId())
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(request)));
+        File testFile = new File(System.getProperty("user.dir") + "/src/test/resources/test-image.jpg");
+        MockMultipartFile profileImage = new MockMultipartFile(
+                "profileImage",                        // @RequestPart 이름
+                "test-image.jpg",                      // 파일 이름
+                MediaType.IMAGE_JPEG_VALUE,            // MIME 타입
+                new FileInputStream(testFile)          // 실제 파일 데이터
+        );
 
-        //then
+        MockMultipartFile requestBody = new MockMultipartFile(
+                "req",                       // @RequestPart("req") 이름과 일치해야 함
+                "",
+                MediaType.APPLICATION_JSON_VALUE,
+                objectMapper.writeValueAsString(
+                        PetUpdateRequest.builder()
+                                .name(newName)
+                                .age(newAge)
+                                .isNeutered(newIsNeutered)
+                                .build()
+                ).getBytes()
+        );
+
+        System.out.println("Profile Image Name: " + profileImage.getOriginalFilename());
+
+        // when
+        ResultActions result = mockMvc.perform(multipart(url, savedPet.getId())
+                .file(profileImage)
+                .file(requestBody)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .with(request -> {
+                    request.setMethod("PUT");
+                    return request;
+                }));
+
+        // then
         result.andExpect(status().isOk());
 
-        Pet pet = petRepository.findById(savedPet.getId()).orElseThrow();
+        // 데이터 검증
+        Pet updatedPet = petRepository.findById(savedPet.getId()).orElseThrow();
 
-        assertThat(pet.getName()).isEqualTo(newName);
-        assertThat(pet.getAge()).isEqualTo(newAge);
-        assertThat(pet.getIsNeutered()).isEqualTo(newIsNeutered);
-        assertThat(pet.getPhotoUrl()).isEqualTo(newPhotoUrl);
+        assertThat(updatedPet.getName()).isEqualTo(newName);
+        assertThat(updatedPet.getAge()).isEqualTo(newAge);
+        assertThat(updatedPet.getIsNeutered()).isEqualTo(newIsNeutered);
+        assertThat(updatedPet.getPhotoUrl()).isNotNull();
     }
 
     @DisplayName("펫 프로필 목록 조회 성공")

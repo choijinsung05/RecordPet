@@ -20,7 +20,10 @@ public enum ResultCode {
     UNAUTHORIZED_EMAIL("UE004", "인증 완료되지 않은 email 입니다.", HttpStatus.UNAUTHORIZED),
 
     // Pet P-
-    NOT_FOUND_PET_PROFILE("P001", "조회된 프로필이 없습니다.", HttpStatus.NOT_FOUND);
+    NOT_FOUND_PET_PROFILE("P001", "조회된 프로필이 없습니다.", HttpStatus.NOT_FOUND),
+
+    // S3 S-
+    IMAGE_UPLOAD_FAIL("S001", "이미지 업로드 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String code;
     private final String message;
