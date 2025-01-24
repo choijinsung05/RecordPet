@@ -45,7 +45,7 @@ public class UserController {
 
     @PatchMapping("/password/{userId}")
     public CustomResponse<UserChangePasswordResponse> changePassword(@PathVariable Long userId,
-        UserChangePasswordRequest req) {
+        @RequestBody UserChangePasswordRequest req) {
         return CustomResponse.success(userService.changePassword(userId, req));
     }
 }

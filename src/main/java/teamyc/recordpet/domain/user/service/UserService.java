@@ -2,11 +2,17 @@ package teamyc.recordpet.domain.user.service;
 
 import static teamyc.recordpet.global.exception.ResultCode.DUPLICATE_USER_EMAIL;
 import static teamyc.recordpet.global.exception.ResultCode.DUPLICATE_USER_NICKNAME;
+import static teamyc.recordpet.global.exception.ResultCode.NOT_ACCEPTABLE_BLANK;
+import static teamyc.recordpet.global.exception.ResultCode.NOT_FOUND_USER;
+import static teamyc.recordpet.global.exception.ResultCode.NOT_MATCH_PASSWORD;
 import static teamyc.recordpet.global.exception.ResultCode.UNAUTHORIZED_EMAIL;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import teamyc.recordpet.domain.user.dto.UserChangePasswordRequest;
+import teamyc.recordpet.domain.user.dto.UserChangePasswordResponse;
 import teamyc.recordpet.domain.user.dto.UserSignupRequest;
 import teamyc.recordpet.domain.user.dto.UserSignupResponse;
 import teamyc.recordpet.domain.user.entity.User;
@@ -51,6 +57,34 @@ public class UserService {
     public ConfirmMailResponse confirmMail(String email, String code) {
         emailAuthService.checkCode(email, code);
         return ConfirmMailResponse.builder().email(email).build();
+    }
+
+    @Transactional
+    public UserChangePasswordResponse changePassword(Long userId, UserChangePasswordRequest req) {
+        if (req.getCurrentPassword() == null || req.getNextPassword() == null) {
+            throw new GlobalException(NOT_ACCEPTABLE_BLANK);
+        }
+        User user = userRepository.findByUserId(userId)
+            .orElseThrow(() -> new GlobalException(NOT_FOUND_USER));
+
+        if (!passwordEncoder.matches(req.getCurrentPassword(), user.getPassword())) {
+            throw new GlobalException(NOT_MATCH_PASSWORD);
+        }
+
+        String newPassword = passwordEncoder.encode(req.getNextPassword());
+
+        User updateUser = User.builder()
+            .userId(userId)
+            .nickname(user.getNickname())
+            .email(user.getEmail())
+            .password(newPassword)
+            .role(user.getRole())
+            .userProfileImageUrl(user.getUserProfileImageUrl())
+            .build();
+
+        userRepository.save(updateUser);
+
+        return new UserChangePasswordResponse();
     }
 
     private void checkDuplicateEmail(UserSignupRequest req) {
