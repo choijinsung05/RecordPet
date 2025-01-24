@@ -43,7 +43,7 @@ public class UserController {
         return CustomResponse.success(userService.confirmMail(email, code));
     }
 
-    @PatchMapping("/password/{userId}")
+    @PatchMapping("/{userId}/change-password")
     public CustomResponse<UserChangePasswordResponse> changePassword(@PathVariable Long userId,
         @RequestBody UserChangePasswordRequest req) {
         return CustomResponse.success(userService.changePassword(userId, req));
